@@ -95,7 +95,7 @@ const authControllers = {
   },
 
   generateAccessToken: (user) => {
-    return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '30s' });
+    return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE || '1d' });
   },
 
   generateRefreshToken: (user) => {
@@ -105,7 +105,10 @@ const authControllers = {
   // ====== Đăng nhập ======
   login: async (req, res) => {
     try {
-      const user = await User.findOne({ username: req.body.username });
+      const loginId = (req.body.username || req.body.email || '').trim();
+      const user = await User.findOne({
+        $or: [{ username: loginId }, { email: loginId }]
+      });
       if (!user) return res.status(404).send('username not found');
 
       const isMatch = await bcrypt.compare(req.body.password, user.password);
@@ -164,6 +167,35 @@ const authControllers = {
         return res.status(500).json({ success: false, error: error.message || 'Error logging in' });
       }
       return res.status(500).send('Error logging in');
+    }
+  },
+
+  changePassword: async (req, res) => {
+    try {
+      const { currentPassword, newPassword } = req.body || {};
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({ success: false, message: 'Vui lòng nhập mật khẩu hiện tại và mật khẩu mới' });
+      }
+      if (String(newPassword).length < 8) {
+        return res.status(400).json({ success: false, message: 'Mật khẩu mới phải có ít nhất 8 ký tự' });
+      }
+
+      const user = await User.findById(req.user.id);
+      if (!user) return res.status(404).json({ success: false, message: 'Không tìm thấy tài khoản' });
+
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) {
+        return res.status(400).json({ success: false, message: 'Mật khẩu hiện tại không đúng' });
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(newPassword, salt);
+      await user.save();
+
+      return res.status(200).json({ success: true, message: 'Đổi mật khẩu thành công' });
+    } catch (error) {
+      console.error('Change password error:', error);
+      return res.status(500).json({ success: false, message: 'Lỗi khi đổi mật khẩu' });
     }
   },
 

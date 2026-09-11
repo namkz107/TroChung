@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FavoriteApi } from '../../services/api';
 import { fetchPostById, fetchAllRooms } from '../../services/api/postApi';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
   Box,
   Typography,
@@ -57,6 +57,9 @@ const InviteDetail = () => {
 
   useEffect(() => {
     const loadData = async () => {
+      setLoading(true);
+      setRoom(null);
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
       try {
         // Load favorites: if logged in -> load from backend, otherwise keep empty in-memory set
         if (accessToken) {
@@ -150,7 +153,9 @@ const InviteDetail = () => {
 
         // similar rooms
         const allRooms = await fetchAllRooms();
-        const similar = allRooms.filter(rm => rm && String(rm.id) !== foundRoom.id).slice(0, 3);
+        const similar = (Array.isArray(allRooms) ? allRooms : [])
+          .filter(rm => rm && String(rm.id || rm._id) && String(rm.id || rm._id) !== String(foundRoom.id))
+          .slice(0, 3);
         setSimilarRooms(similar);
 
         // reviews from localStorage (fallback)
@@ -165,7 +170,7 @@ const InviteDetail = () => {
       }
     };
     loadData();
-  }, [id]);
+  }, [id, accessToken]);
 
   // Auto-hide contact card on mobile
   useEffect(() => {
@@ -390,7 +395,7 @@ const InviteDetail = () => {
                       {editFor?.id === c._id ? (
                         <Stack direction="row" spacing={1} sx={{ mt: 0.5 }}>
                           <input value={editText} onChange={(e) => setEditText(e.target.value)} style={{ flex: 1, padding: 8, borderRadius: 8, border: '1px solid #e0e0e0' }} />
-                          <Button size="small" onClick={async () => { try { const updated = await CommentApi.update(c._id, { content: editText }); setComments((prev) => prev.map(x => x._id === c._1 ? { ...x, content: updated.content, isEdited: true } : x)); setEditFor(null); setEditText(''); } catch (_) {} }}>Lưu</Button>
+                          <Button size="small" onClick={async () => { try { const updated = await CommentApi.update(c._id, { content: editText }); setComments((prev) => prev.map(x => x._id === c._id ? { ...x, content: updated.content, isEdited: true } : x)); setEditFor(null); setEditText(''); } catch (_) {} }}>Lưu</Button>
                           <Button size="small" color="inherit" onClick={() => { setEditFor(null); setEditText(''); }}>Hủy</Button>
                         </Stack>
                       ) : (
@@ -458,7 +463,7 @@ const InviteDetail = () => {
                         </Stack>
                       </Box>
                       <Stack direction="row" spacing={0.5}>
-                        <Button variant="outlined" size="small" onClick={() => navigate(`/room/${similarRoom.id}`)} sx={{ flex: 1, textTransform: 'none', fontSize: '0.75rem', py: 0.5 }}>Xem chi tiết</Button>
+                        <Button variant="outlined" size="small" component={Link} to={similarRoom.postType && String(similarRoom.postType).toLowerCase().includes('invite') && similarRoom.postId ? `/invite/${similarRoom.postId}` : `/room/${similarRoom.id || similarRoom._id}`} sx={{ flex: 1, textTransform: 'none', fontSize: '0.75rem', py: 0.5 }}>Xem chi tiết</Button>
                         <Button variant="contained" size="small" startIcon={<Phone sx={{ fontSize: 14 }} />} sx={{ flex: 1, textTransform: 'none', fontSize: '0.75rem', py: 0.5 }}>Liên hệ</Button>
                       </Stack>
                     </CardContent>

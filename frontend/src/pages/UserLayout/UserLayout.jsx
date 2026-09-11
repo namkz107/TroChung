@@ -1,40 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import { Box } from '@mui/material';
-import { Outlet, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, Component } from 'react';
+import { Box, Typography } from '@mui/material';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import UserSidebar from '../../Components/Dashboard/UserSidebar';
+
+class OutletErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+
+  componentDidCatch(error) {
+    console.error('User page crashed:', error);
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <Box sx={{ p: 3 }}>
+          <p>Trang này đang gặp lỗi. Thử tải lại hoặc chọn mục khác trên menu.</p>
+          <pre style={{ whiteSpace: 'pre-wrap', color: '#c62828' }}>
+            {String(this.state.error?.message || this.state.error)}
+          </pre>
+        </Box>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const UserLayout = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // Read auth.login from redux store
   const login = useSelector((state) => state.auth?.login);
   const isLoggedIn = Boolean(
     login?.currentUser || (login?.accessToken && String(login.accessToken).trim().length > 0)
   );
 
   useEffect(() => {
-    // If user is not logged in, redirect to login page
     if (!isLoggedIn) {
       navigate('/login', { replace: true });
     }
   }, [isLoggedIn, navigate]);
 
-  const handleMobileMenuToggle = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
+  if (!isLoggedIn) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Typography>Đang chuyển tới trang đăng nhập...</Typography>
+      </Box>
+    );
+  }
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', width: '100vw' }}>
-      {/* Sidebar */}
-      <UserSidebar 
+    <Box sx={{ display: 'flex', minHeight: 'calc(100vh - 64px)', width: '100%', overflowX: 'hidden' }}>
+      <UserSidebar
         mobileMenuOpen={mobileMenuOpen}
         onMobileMenuClose={() => setMobileMenuOpen(false)}
       />
 
-      {/* Main Content */}
-      <Box 
+      <Box
         component="main"
         sx={{
           flex: 1,
@@ -42,10 +72,12 @@ const UserLayout = () => {
           backgroundColor: '#fff',
           minWidth: 0,
           overflow: 'auto',
-          mt: { xs: '56px', md: 0 }, // Margin top cho mobile AppBar
+          mt: { xs: '56px', md: 0 },
         }}
       >
-        <Outlet />
+        <OutletErrorBoundary key={location.pathname}>
+          <Outlet />
+        </OutletErrorBoundary>
       </Box>
     </Box>
   );

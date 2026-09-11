@@ -24,10 +24,11 @@ const ContactCard = ({ room }) => {
       position: 'fixed', 
       right: { xs: 12, md: 28 }, 
       bottom: { xs: 20, md: 28 }, 
-      zIndex: 1200, 
-      width: { xs: 330, md: 380 }
+      zIndex: 10, 
+      width: { xs: 280, md: 320 },
+      pointerEvents: 'none'
     }}>
-      <Paper sx={{ p: 3, borderRadius: 2, boxShadow: 6 }}>
+      <Paper sx={{ p: 2, borderRadius: 2, boxShadow: 6, pointerEvents: 'auto' }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
             Liên hệ ngay

@@ -3,94 +3,76 @@ import { jwtDecode } from 'jwt-decode';
 import store from '../redux/store';
 import { loginSuccess } from '../redux/slices/authSlice';
 
-// Tạo axios instance riêng cho các API cần JWT
-// Use environment variable REACT_APP_API_URL when provided, otherwise fall back to deployed backend
+const API_URL_FROM_ENV = (process.env.REACT_APP_API_URL || '').trim();
+const IS_DEV = process.env.NODE_ENV === 'development';
+const API_BASE_URL =
+  API_URL_FROM_ENV || (IS_DEV ? '' : 'https://trochung-deployment-phase2.onrender.com');
+
 const axiosJWT = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'https://trochung-deployment-phase2.onrender.com',
-  withCredentials: true
+  baseURL: API_BASE_URL,
+  withCredentials: true,
+  timeout: 20000
 });
 
-// Hàm refresh access token khi token hết hạn hoặc đã reload trang không còn token trong memory
+let refreshPromise = null;
 const refreshAccessToken = async () => {
-  try {
-    // Gọi API refresh token với cookie chứa refresh token
-    const res = await axios.post("/api/auth/refreshToken", {}, {
-      withCredentials: true
-    });
-    return res.data;
-  } catch (error) {
-    // Nếu refresh thất bại thì chuyển về trang login
-    window.location.href = '/login';
+  if (refreshPromise) return refreshPromise;
+  refreshPromise = axios.post('/api/auth/refreshToken', {}, {
+    baseURL: API_BASE_URL,
+    withCredentials: true,
+    timeout: 8000
+  }).then((res) => res.data).catch((err) => {
+    console.warn('Refresh token failed:', err?.response?.status || err.message);
     return null;
+  }).finally(() => {
+    refreshPromise = null;
+  });
+  return refreshPromise;
+};
+
+const attachToken = (config, token) => {
+  if (!token) return config;
+  config.headers = config.headers || {};
+  config.headers.token = `Bearer ${token}`;
+  config.headers.Authorization = `Bearer ${token}`;
+  return config;
+};
+
+const isExpired = (accessToken) => {
+  try {
+    const decoded = jwtDecode(accessToken);
+    return !decoded?.exp || decoded.exp < (Date.now() / 1000) + 15;
+  } catch {
+    return true;
   }
 };
 
-// Request interceptor - Chặn và xử lý mọi request trước khi gửi
 axiosJWT.interceptors.request.use(async (config) => {
-  // Lấy state hiện tại từ Redux store
+  const url = String(config?.url || '');
+  if (url.includes('/auth/refreshToken')) return config;
+
   const state = store.getState();
-  const accessToken = state?.auth?.login?.accessToken || "";
+  const accessToken = state?.auth?.login?.accessToken || '';
   const currentUser = state?.auth?.login?.currentUser || null;
 
-  // Kiểm tra xem có access token không
+  if (accessToken && !isExpired(accessToken)) {
+    return attachToken(config, accessToken);
+  }
+
+  const data = await refreshAccessToken();
+  if (data?.accessToken) {
+    store.dispatch(loginSuccess({
+      user: data.user || currentUser,
+      accessToken: data.accessToken
+    }));
+    return attachToken(config, data.accessToken);
+  }
+
   if (accessToken) {
-    try {
-      // Giải mã token để lấy thời gian hết hạn
-      const token = jwtDecode(accessToken);
-      const currentTime = Date.now() / 1000;
-      const isExpired = token.exp < currentTime;
-
-      // Nếu token đã hết hạn thì refresh
-      if (isExpired) {
-        const data = await refreshAccessToken();
-
-        if (data) {
-          // Cập nhật Redux store với token mới
-          const refreshUser = {
-            user: currentUser,
-            accessToken: data.accessToken
-          };
-          store.dispatch(loginSuccess(refreshUser));
-
-          // Sử dụng token mới cho request này
-          config.headers["token"] = `Bearer ${data.accessToken}`;
-        } else {
-          // Nếu refresh thất bại thì hủy request
-          return Promise.reject(new Error('AUTH_FAILED'));
-        }
-      } else {
-        // Token còn hạn thì dùng token hiện tại
-        config.headers["token"] = `Bearer ${accessToken}`;
-      }
-    } catch (error) {
-      // Nếu có lỗi decode token thì vẫn dùng token cũ
-      config.headers["token"] = `Bearer ${accessToken}`;
-    }
+    return attachToken(config, accessToken);
   }
-  else {
-    const data = await refreshAccessToken();
-
-    if (data) {
-      // Cập nhật Redux store với token mới
-      const refreshUser = {
-        user: currentUser,
-        accessToken: data.accessToken
-      };
-      store.dispatch(loginSuccess(refreshUser));
-
-      // Sử dụng token mới cho request này
-      config.headers["token"] = `Bearer ${data.accessToken}`;
-    } else {
-      // Nếu refresh thất bại thì hủy request
-      return Promise.reject(new Error('AUTH_FAILED'));
-    }
-
-  }
-  // Không có token thì để trống, backend sẽ trả về 401
 
   return config;
-}, (error) => {
-  return Promise.reject(error);
-});
+}, (error) => Promise.reject(error));
 
 export default axiosJWT;

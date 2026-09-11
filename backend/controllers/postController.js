@@ -409,10 +409,17 @@ exports.getAllRooms = async (req, res) => {
 exports.getRoomById = async (req, res) => {
     try {
         const { id } = req.params;
-
-        const room = await Room.findById(id)
-            .populate('post', 'title overviewDescription status createdAt')
+        const populateRoom = (query) => query
+            .populate('post', 'title overviewDescription status createdAt postType postTier')
             .populate('user', 'username email phone');
+
+        let room = null;
+        if (id && /^[0-9a-fA-F]{24}$/.test(String(id))) {
+            room = await populateRoom(Room.findById(id));
+            if (!room) {
+                room = await populateRoom(Room.findOne({ post: id }));
+            }
+        }
 
         if (!room) {
             return res.status(404).json({
@@ -426,6 +433,7 @@ exports.getRoomById = async (req, res) => {
             id: room._id.toString(),
             postId: room.post?._id?.toString() || null,
             title: room.post?.title || 'Không có tiêu đề',
+            postType: room.post?.postType || 'room_rental',
             price: room.price,
             unit: room.unit,
             area: room.area,
@@ -1050,6 +1058,7 @@ exports.getLatestPosts = async (req, res) => {
         }
 
         const q = {};
+        const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         // Hiển thị toàn bộ bài đăng (kể cả pending / rejected) theo yêu cầu trang chủ
         // Nếu sau này cần ẩn rejected, có thể thêm lại điều kiện:
         // q.status = { $ne: 'rejected' };
@@ -1065,7 +1074,6 @@ exports.getLatestPosts = async (req, res) => {
                 target = 'invite roomate';
             }
             // Use case-insensitive exact match via regex
-            const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             q.postType = { $regex: new RegExp('^' + escapeRegExp(String(target)) + '$', 'i') };
         }
 
@@ -1115,7 +1123,7 @@ exports.getLatestPosts = async (req, res) => {
             createdAt: post.createdAt,
             user: post.user ? { id: post.user._id, username: post.user.username, phone: post.user.phone } : null,
             room: post.room ? {
-                id: post.room._id,
+                id: post.room._id?.toString?.() || String(post.room._id),
                 price: post.room.price,
                 unit: post.room.unit,
                 area: post.room.area,

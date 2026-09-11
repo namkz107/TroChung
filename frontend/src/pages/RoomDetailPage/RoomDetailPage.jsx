@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FavoriteApi } from '../../services/api';
-import { fetchRoomById, fetchAllRooms } from '../../services/api/postApi';
+import { fetchRoomById, fetchRooms } from '../../services/api/postApi';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Typography, Button, Grid } from '@mui/material';
 import { CommentApi } from '../../services/api/commentApi';
@@ -35,75 +35,88 @@ const RoomDetailPage = () => {
   const [ratingStats, setRatingStats] = useState({ average: 0, count: 0 });
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        console.log('RoomDetailPage - Loading room with ID:', id);
-        
-        // Favorites: do NOT read/write localStorage. If authenticated, load favorites from backend; otherwise keep empty in-memory.
-        if (accessToken) {
-          try {
-            const resFav = await FavoriteApi.getMyFavorites();
-            const ids = (resFav?.favorites || []).map(f => String(f.room?._id || f.clientRoomId || f.room));
-            setFavorites(new Set(ids));
-          } catch (err) {
-            console.error('Error loading favorites in RoomDetailPage:', err);
-            setFavorites(new Set());
-          }
-        } else {
-          setFavorites(new Set());
-        }
+    let cancelled = false;
 
-        // Fetch room details from API
+    const loadData = async () => {
+      setLoading(true);
+      setSimilarRooms([]);
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      try {
+        const favPromise = accessToken
+          ? FavoriteApi.getMyFavorites()
+              .then((resFav) => (resFav?.favorites || []).map(f => String(f.room?._id || f.clientRoomId || f.room)))
+              .catch(() => [])
+          : Promise.resolve([]);
+
         const foundRoom = await fetchRoomById(id);
-        console.log('RoomDetailPage - Found room:', foundRoom);
-        
+        if (cancelled) return;
+
         if (foundRoom) {
           setRoom(foundRoom);
+          setLoading(false);
+
           const postId = foundRoom?.postId || foundRoom?.post || foundRoom?.id;
-          console.log('🔑 PostId for comments/ratings:', postId);
-          console.log('📦 Room data:', foundRoom);
-          
-          try {
-            // Load comments & ratings từ server nếu có postId hợp lệ
-            if (postId) {
-              console.log('📡 Loading comments and ratings...');
-              const cmtPromise = CommentApi.listByPost(postId).catch(e => { console.error('Comments error:', e); return []; });
-              const statsPromise = RatingApi.stats(postId).catch(e => { console.error('Stats error:', e); return { average: 0, count: 0 }; });
-              const minePromise = accessToken ? RatingApi.me(postId).catch(e => { console.log('Me rating error (OK if not logged in):', e.message); return null; }) : Promise.resolve(null);
-              const [cmt, stats, mine] = await Promise.all([cmtPromise, statsPromise, minePromise]);
-              console.log('✅ Comments loaded:', cmt);
-              console.log('✅ Stats loaded:', stats);
-              console.log('✅ My rating loaded:', mine);
-              setComments(Array.isArray(cmt) ? cmt : []);
-              setRatingStats(stats || { average: 0, count: 0 });
-              setMyRating(mine || null);
-            } else {
-              console.warn('⚠️ No postId found, cannot load comments/ratings');
-              setComments([]);
-              setRatingStats({ average: 0, count: 0 });
-              setMyRating(null);
-            }
-          } catch (e) {
-            console.error('❌ Load comments/ratings failed:', e);
+          const extras = [];
+          if (postId) {
+            extras.push(
+              Promise.all([
+                CommentApi.listByPost(postId).catch(() => []),
+                RatingApi.stats(postId).catch(() => ({ average: 0, count: 0 })),
+                accessToken ? RatingApi.me(postId).catch(() => null) : Promise.resolve(null)
+              ]).then(([cmt, stats, mine]) => {
+                if (!cancelled) {
+                  setComments(Array.isArray(cmt) ? cmt : []);
+                  setRatingStats(stats || { average: 0, count: 0 });
+                  setMyRating(mine || null);
+                }
+              })
+            );
+          } else {
             setComments([]);
             setRatingStats({ average: 0, count: 0 });
             setMyRating(null);
           }
-          
-          // Load similar rooms from API
-          const allRooms = await fetchAllRooms();
-          const similar = allRooms.filter(r => r && r.id !== foundRoom.id).slice(0, 3);
-          setSimilarRooms(similar);
+
+          extras.push(
+            fetchRooms({ page: 1, limit: 12, postType: foundRoom.postType }).then((allRooms) => {
+              const list = Array.isArray(allRooms?.rooms) ? allRooms.rooms : [];
+              const similar = list
+                .filter((r) => {
+                  const rid = String(r?.id || r?._id || '');
+                  return rid && rid !== String(foundRoom.id) && rid !== String(id);
+                })
+                .slice(0, 3);
+              if (!cancelled) setSimilarRooms(similar);
+            }).catch(() => {
+              if (!cancelled) setSimilarRooms([]);
+            })
+          );
+
+          extras.push(
+            favPromise.then((ids) => {
+              if (!cancelled) setFavorites(new Set(ids));
+            })
+          );
+
+          await Promise.all(extras);
+        } else {
+          setRoom(null);
+          setLoading(false);
+          const ids = await favPromise;
+          if (!cancelled) setFavorites(new Set(ids));
         }
-        setLoading(false);
       } catch (e) {
         console.error('Error loading room data:', e);
-        setLoading(false);
+        if (!cancelled) {
+          setRoom(null);
+          setLoading(false);
+        }
       }
     };
-    
+
     loadData();
-  }, [id]);
+    return () => { cancelled = true; };
+  }, [id, accessToken]);
 
   const toggleFavorite = async () => {
     console.log('❤️ Favorite toggle (header)');
@@ -152,7 +165,7 @@ const RoomDetailPage = () => {
   const isFavorite = favorites.has(String(room.id));
 
   return (
-    <Box sx={{ maxWidth: 1200, mx: 'auto', p: 3 }}>
+    <Box key={id} sx={{ maxWidth: 1200, mx: 'auto', p: 3, pb: { xs: 18, md: 22 } }}>
       {/* Header */}
       <RoomHeader 
         room={room}

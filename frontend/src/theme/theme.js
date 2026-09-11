@@ -31,7 +31,7 @@ const theme = createTheme({
       contrastText: '#1a202c',
     },
     background: {
-      default: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      default: '#f5f7fa',
       paper: '#ffffff',
     },
   },

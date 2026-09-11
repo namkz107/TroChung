@@ -12,6 +12,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const PostNews = ({postType='all'}) => {
     const theme = useTheme();
@@ -51,6 +52,14 @@ const PostNews = ({postType='all'}) => {
         if (rentKeys.includes(key)) return { text: 'Cho thuê', color: 'primary.main' };
         if (shareKeys.includes(key)) return { text: 'Tìm ở ghép', color: 'warning.main' };
         return { text: String(postType), color: 'grey.800' };
+    };
+
+    const getDetailHref = (it) => {
+        const type = String(it?.postType || '').toLowerCase();
+        if (type.includes('invite') || type.includes('roomate') || type.includes('roommate')) {
+            return `/invite/${it.id}`;
+        }
+        return `/room/${it.room?.id || it.room?._id || it.id}`;
     };
 
     // guard concurrent loads with a ref to avoid stale-deps re-trigger loops
@@ -221,7 +230,7 @@ const PostNews = ({postType='all'}) => {
                                 </Box>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
                                   
-                                    <Button component="a" href={`/room/${it.room?.id }`} size="small" variant="outlined" sx={{ textTransform: 'none' }}>Xem chi tiết</Button>
+                                    <Button component={Link} to={getDetailHref(it)} size="small" variant="outlined" sx={{ textTransform: 'none' }}>Xem chi tiết</Button>
                                 </Box>
                             </CardContent>
                         </Card>

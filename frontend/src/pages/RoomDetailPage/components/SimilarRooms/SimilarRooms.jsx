@@ -1,6 +1,16 @@
 import { Paper, Typography, Grid, Card, Box, CardContent, Stack, Chip, Button, IconButton, Rating as MuiRating } from '@mui/material';
 import { LocationOn, Phone, Favorite, FavoriteBorder } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+
+const roomDetailPath = (room) => {
+  const type = String(room?.postType || '').toLowerCase();
+  const roomId = room?.id || room?._id;
+  const postId = room?.postId;
+  if ((type.includes('invite') || type.includes('roomate') || type.includes('roommate')) && postId) {
+    return `/invite/${postId}`;
+  }
+  return roomId ? `/room/${roomId}` : '/rooms';
+};
 
 const SimilarRooms = ({ 
   similarRooms, 
@@ -154,8 +164,9 @@ const SimilarRooms = ({
                   <Button 
                     variant="outlined" 
                     size="small" 
-                    onClick={() => navigate(`/room/${similarRoom.id}`)}
-                    sx={{ flex: 1, textTransform: 'none', fontSize: '0.75rem', py: 0.5 }}
+                    component={Link}
+                    to={roomDetailPath(similarRoom)}
+                    sx={{ flex: 1, textTransform: 'none', fontSize: '0.75rem', py: 0.5, zIndex: 2 }}
                   >
                     Xem chi tiết
                   </Button>

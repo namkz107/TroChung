@@ -1,7 +1,8 @@
+import axios from '../../../config/axios';
 import axiosJWT from '../../../config/axiosJWT';
 
 export const getCaptcha = async () => {
-    return await axiosJWT.get('/api/support/captcha');
+    return await axios.get('/api/support/captcha');
 };
 
 export const sendSupport = async (form, captchaToken) => {

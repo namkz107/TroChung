@@ -1,10 +1,12 @@
 const authControllers = require('../controllers/authControllers');
+const { verifyToken } = require('../middleware/middlewareControllers');
 
 const router = require('express').Router();
 //auth
 router.post('/login', authControllers.login);
 router.post('/register', authControllers.register);
 router.post('/logout', authControllers.logout);
+router.post('/change-password', verifyToken, authControllers.changePassword);
 
 //refresh token
 router.post('/refreshToken', authControllers.refreshToken);

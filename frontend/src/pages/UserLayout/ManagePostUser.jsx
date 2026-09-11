@@ -39,12 +39,18 @@ export default function ManagePostUser() {
       setLoading(true);
       setError(null);
       try {
-        if (!currentUser?._id) {
+        if (!(currentUser?._id || currentUser?.id)) {
           if (mounted) setPosts([]);
           return;
         }
         const result = await fetchMyPostsAction(dispatch);
-        if (mounted) setPosts(Array.isArray(result.posts) ? result.posts : []);
+        if (!mounted) return;
+        if (result?.error) {
+          setError(result);
+          setPosts([]);
+        } else {
+          setPosts(Array.isArray(result.posts) ? result.posts : []);
+        }
       } catch (err) {
         console.error('Failed to load user posts', err);
         if (mounted) setError(err);

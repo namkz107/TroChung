@@ -2,7 +2,7 @@ import "./App.css";
 import './config/axios';
 import HomeAdmin from "./pages/AdminLayout/HomeAdmin/HomeAdmin";
 import HomePageUser from "./pages/HomePageUser/HomePageUser";
-import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage/LoginPage";
 // RegisterPage import removed (unused)
 import NavBar from "./Components/NavBar/NavBar";
@@ -15,6 +15,8 @@ import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 // Layouts
 import AdminLayout from "./pages/AdminLayout/AdminLayout";
 import UserLayout from "./pages/UserLayout/UserLayout";
+import ChangePassword from "./pages/UserLayout/ChangePassword";
+import Notifications from "./pages/UserLayout/Notifications";
 
 
 // Pages
@@ -93,6 +95,9 @@ function AppContent() {
           {/* User routes */}
 
           <Route path="/user" element={<UserLayout />}>
+            <Route index element={<Navigate to="profile" replace />} />
+            <Route path="change-password" element={<ChangePassword />} />
+            <Route path="notifications" element={<Notifications />} />
             <Route path="paying/:requirepaying" element={<Paying />} />
             <Route path="paying" element={<Paying />} />
             <Route path="topup-history" element={<TopupHistory />} />
