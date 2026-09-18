@@ -293,7 +293,7 @@ const NavBar = () => {
                   }
                 }}
               >
-                {user?.role === 'admin' ? 'Admin' : 'Quản lý'}
+                {user?.role === 'admin' ? 'Quay lại Admin Panel' : 'Quản lý'}
               </Button>
 
               <IconButton

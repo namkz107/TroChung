@@ -28,6 +28,7 @@ import {
     CardContent
 } from '@mui/material';
 import { supportApi } from '../../../services/api';
+import AdminPageHeader from '../../../Components/Admin/AdminPageHeader';
 
 const AdminSupport = () => {
     const [supports, setSupports] = useState([]);
@@ -156,7 +157,8 @@ const AdminSupport = () => {
     }
 
     return (
-        <Box sx={{ p: 3 }}>
+        <Box className="admin-page">
+            <AdminPageHeader title="Quản lý hỗ trợ" description="Tiếp nhận, phân loại và phản hồi yêu cầu hỗ trợ từ người dùng." count={pagination.totalItems} countLabel="yêu cầu" />
             <Typography variant="h4" gutterBottom>
                 Quản lý tin hỗ trợ
             </Typography>
@@ -225,7 +227,7 @@ const AdminSupport = () => {
             </Grid>
 
             {/* Table */}
-            <TableContainer component={Paper}>
+            <TableContainer className="admin-data-table admin-support-table" component={Paper}>
                 <Table>
                     <TableHead>
                         <TableRow>

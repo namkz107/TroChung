@@ -22,6 +22,7 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { getAllUsers, banUser, unbanUser } from '../../../services/api/userApi';
 import { clearMessage } from '../../../redux/slices/userSlice';
 import { useConfirm } from '../../../Components/ConfirmProvider';
+import AdminPageHeader from '../../../Components/Admin/AdminPageHeader';
 
 const ROLE_FILTER = { all: 'all', user: 'user', admin: 'admin' };
 
@@ -131,7 +132,8 @@ const AdminUsers = () => {
   }
 
   return (
-    <Box>
+    <Box className="admin-page">
+      <AdminPageHeader title="Quản lý tài khoản" description="Theo dõi vai trò, trạng thái và quyền truy cập của người dùng." count={filtered.length} countLabel="tài khoản" />
       <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
         Quản lý tài khoản
       </Typography>
@@ -154,7 +156,7 @@ const AdminUsers = () => {
         <Tab label="Quản trị viên" value={ROLE_FILTER.admin} />
       </Tabs>
 
-      <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 1 }}>
+      <TableContainer className="admin-data-table admin-users-table" component={Paper} variant="outlined">
         <Table size="small" stickyHeader>
           <TableHead>
             <TableRow>

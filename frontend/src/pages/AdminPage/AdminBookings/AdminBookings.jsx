@@ -16,6 +16,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { useConfirm } from '../../../Components/ConfirmProvider';
 
 import { Box, Modal, Typography } from '@mui/material';
+import AdminPageHeader from '../../../Components/Admin/AdminPageHeader';
 
 const statusColor = {
   pending: { color: 'warning', label: 'Chờ xác nhận' },
@@ -120,11 +121,12 @@ const AdminBookings = () => {
   const pagedBookings = bookings.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
-    <div style={{ maxWidth: 1200, margin: '0 auto', marginTop: 32 }}>
+    <div className="admin-page">
+      <AdminPageHeader title="Quản lý đặt phòng" description="Theo dõi, xác nhận thanh toán và kiểm tra chi tiết các lượt đặt phòng." count={bookings.length} countLabel="đơn đặt" />
       {error && <div style={{ color: '#d32f2f', background: '#fff3f3', borderRadius: 8, padding: 12, marginBottom: 16, textAlign: 'center' }}>{error}</div>}
       {loading && <div style={{ marginBottom: 12, textAlign: 'center' }}>Đang tải...</div>}
-      <TableContainer component={Paper} sx={{ borderRadius: 3, boxShadow: '0 2px 16px 0 rgba(25, 118, 210, 0.07)' }}>
-        <Table sx={{ minWidth: 700 }}>
+      <TableContainer className="admin-data-table admin-bookings-table" component={Paper} sx={{ borderRadius: 3, boxShadow: 'none' }}>
+        <Table>
           <TableHead>
             <TableRow sx={{ bgcolor: '#f4f6fb' }}>
               <TableCell align="center" sx={{ fontWeight: 700 }}>Phòng</TableCell>

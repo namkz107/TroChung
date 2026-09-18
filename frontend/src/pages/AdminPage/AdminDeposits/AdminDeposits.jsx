@@ -10,6 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
+import AdminPageHeader from '../../../Components/Admin/AdminPageHeader';
 
 const AdminDeposits = () => {
   const [deposits, setDeposits] = useState([]);
@@ -68,7 +69,8 @@ const AdminDeposits = () => {
   const paged = deposits.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
-    <div style={{ maxWidth: 1200, margin: '0 auto', marginTop: 32 }}>
+    <div className="admin-page">
+      <AdminPageHeader title="Yêu cầu đặt cọc" description="Xác minh và xử lý các khoản đặt cọc đang chờ trên hệ thống." count={deposits.length} countLabel="giao dịch" />
       {error && (
         <div
           style={{
@@ -85,8 +87,8 @@ const AdminDeposits = () => {
       )}
       {loading && <div style={{ marginBottom: 12, textAlign: 'center' }}>Đang tải...</div>}
 
-      <TableContainer component={Paper} sx={{ borderRadius: 3, boxShadow: '0 2px 16px 0 rgba(25, 118, 210, 0.07)' }}>
-        <Table sx={{ minWidth: 700 }}>
+      <TableContainer className="admin-data-table admin-deposits-table" component={Paper} sx={{ borderRadius: 3, boxShadow: 'none' }}>
+        <Table>
           <TableHead>
             <TableRow sx={{ bgcolor: '#f4f6fb' }}>
               <TableCell align="center" sx={{ fontWeight: 700 }}>Phòng</TableCell>

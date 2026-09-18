@@ -1,0 +1,108 @@
+.admin-shell { background:#f3f7f4; color:#173b33; }
+.admin-sidebar .MuiDrawer-paper { background:#103f36; color:#fff; border:0; border-radius:0 24px 24px 0; box-shadow:10px 0 35px rgba(14,54,47,.1); overflow:hidden; }
+.admin-sidebar__brand { gap:12px; min-height:78px!important; padding:0 22px!important; }
+.admin-sidebar__mark { width:38px; height:38px; display:grid; place-items:center; border-radius:12px; background:#9ce1cc; color:#103f36; font:700 1.4rem 'Playfair Display',serif; }
+.admin-sidebar__name.MuiTypography-root { font:700 1.12rem 'Playfair Display',serif; line-height:1.2; }
+.admin-sidebar__caption.MuiTypography-root { color:rgba(255,255,255,.5); font-size:.61rem; letter-spacing:.18em; }
+.admin-sidebar__profile { margin:8px 14px 18px; padding:14px; border-radius:16px; background:rgba(255,255,255,.07); display:flex; align-items:center; gap:11px; }
+.admin-sidebar__profile .MuiAvatar-root { width:38px; height:38px; background:#d7a553; font-weight:700; }
+.admin-sidebar__profile .MuiTypography-caption { color:rgba(255,255,255,.55); }
+.admin-sidebar .MuiDivider-root { border-color:rgba(255,255,255,.1); }
+.admin-sidebar__section.MuiTypography-root { color:rgba(255,255,255,.42); font-size:.64rem; letter-spacing:.18em; font-weight:800; margin:20px 24px 8px; }
+.admin-sidebar__menu { padding:0 12px!important; overflow-y:auto; }
+.admin-sidebar .MuiListItemButton-root { min-height:45px; border-radius:12px; margin-bottom:3px; color:rgba(255,255,255,.72); transition:.2s ease; }
+.admin-sidebar .MuiListItemIcon-root { color:inherit; min-width:38px; }
+.admin-sidebar .MuiListItemIcon-root svg { font-size:1.25rem; }
+.admin-sidebar .MuiListItemText-primary { font-size:.87rem; font-weight:600; }
+.admin-sidebar .MuiListItemButton-root:hover { background:rgba(255,255,255,.08); color:#fff; transform:translateX(2px); }
+.admin-sidebar .MuiListItemButton-root.Mui-selected { color:#103f36; background:#a8e8d3; }
+.admin-sidebar .MuiListItemButton-root.Mui-selected:hover { background:#b9efdf; }
+.admin-sidebar__bottom { margin-top:auto; padding:10px 12px 18px; }
+.admin-sidebar .admin-sidebar__logout { color:#ffb9b9; }
+.admin-main { flex:1; min-width:0; padding:24px; }
+.admin-content { min-height:calc(100vh - 48px); background:#fff; border:1px solid rgba(23,59,51,.07); border-radius:24px; padding:clamp(18px,2.4vw,32px); box-shadow:0 12px 42px rgba(18,55,47,.06); overflow:hidden; }
+.admin-page { width:100%; max-width:none; margin:0; padding:0; }
+.admin-page-header { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; min-height:92px; padding:0 2px 24px; margin-bottom:22px; border-bottom:1px solid #e7eeea; }
+.admin-page-header__eyebrow.MuiTypography-root { color:#4f9a84; font-size:.66rem; line-height:1; font-weight:800; letter-spacing:.17em; margin-bottom:8px; }
+.admin-page-header__title.MuiTypography-root { color:#173b33; font:700 clamp(1.65rem,2.4vw,2.15rem)/1.15 'Playfair Display',serif; letter-spacing:-.025em; }
+.admin-page-header__description.MuiTypography-root { color:#73847d; font-size:.86rem; line-height:1.5; margin-top:7px; max-width:650px; }
+.admin-page-header__aside { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.admin-page-header__count.MuiChip-root { height:34px; padding:0 6px; color:#315d52; background:#edf5f1; border:1px solid #d9e9e2; }
+.admin-page-header__count .MuiChip-icon { color:#4f9a84; font-size:.62rem; }
+.admin-page>.MuiTypography-h4,.admin-page>.MuiTypography-h5 { display:none; }
+.admin-page>.MuiTabs-root { min-height:46px; margin:0 0 20px; padding:4px; border-radius:13px; background:#f2f6f4; }
+.admin-page>.MuiTabs-root .MuiTabs-indicator { display:none; }
+.admin-page>.MuiTabs-root .MuiTab-root { min-height:38px; border-radius:10px; text-transform:none; font-size:.82rem; font-weight:700; color:#6c7d76; }
+.admin-page>.MuiTabs-root .Mui-selected { color:#174f43!important; background:#fff; box-shadow:0 3px 12px rgba(18,55,47,.08); }
+.admin-page>.MuiBox-root:not(.admin-page-header):has(.MuiFormControl-root) { margin-bottom:20px; padding:12px; border-radius:14px; background:#f7faf8; border:1px solid #e7eeea; }
+.admin-page>.MuiGrid-root { margin-bottom:22px; }
+.admin-page>.MuiGrid-root .MuiCard-root { box-shadow:none; border:1px solid #e2ebe6; }
+.admin-page>.MuiGrid-root .MuiCardContent-root { padding:18px!important; }
+
+/* Unified admin data tables */
+.admin-content .MuiTableContainer-root { width:100%; max-width:100%; overflow:visible; border:1px solid #dfe9e4; border-radius:18px; box-shadow:none; background:#fff; }
+.admin-content .MuiTable-root { width:100%; min-width:0!important; table-layout:fixed; border-collapse:separate; border-spacing:0; }
+.admin-content .MuiTableHead-root { background:#edf5f1; }
+.admin-content .MuiTableHead-root .MuiTableCell-root { position:sticky; top:0; z-index:2; color:#315d52; font-size:.72rem; text-transform:uppercase; letter-spacing:.055em; font-weight:800; padding:14px 16px; border-bottom:1px solid #d7e5df; white-space:nowrap; }
+.admin-content .MuiTableBody-root .MuiTableCell-root { padding:12px 14px; color:#294a42; font-size:.82rem; line-height:1.45; border-bottom:1px solid #edf1ef; vertical-align:middle; overflow-wrap:anywhere; word-break:break-word; }
+.admin-content .MuiTableBody-root .MuiTableRow-root:nth-of-type(even) { background:#fbfdfc; }
+.admin-content .MuiTableBody-root .MuiTableRow-root { transition:background-color .18s ease,box-shadow .18s ease; }
+.admin-content .MuiTableBody-root .MuiTableRow-root:hover { background:#f0f8f4; box-shadow:inset 3px 0 #4f9a84; }
+.admin-content .MuiTableBody-root .MuiTableRow-root:last-child .MuiTableCell-root { border-bottom:0; }
+.admin-content .MuiTableCell-root .MuiButton-root { min-height:34px; padding:5px 12px; border-radius:9px; font-size:.77rem; }
+.admin-content .MuiTableCell-root .MuiIconButton-root { width:34px; height:34px; background:#f1f6f3; }
+.admin-content .MuiTableCell-root .MuiChip-root { height:27px; font-size:.72rem; font-weight:700; }
+.admin-content .MuiTableCell-root .MuiSelect-select { padding-top:7px; padding-bottom:7px; font-size:.78rem; }
+.admin-content .admin-data-table .MuiTableCell-root:first-child { width:14%; }
+.admin-content .admin-data-table .MuiTableCell-root:last-child { width:22%; }
+.admin-content .admin-data-table .MuiTableCell-root:nth-last-child(2) { width:15%; }
+.admin-content .admin-data-table .MuiTableCell-root:last-child .MuiBox-root,
+.admin-content .admin-data-table .MuiTableCell-root:last-child>div { flex-direction:row!important; justify-content:center; align-items:center; gap:6px!important; flex-wrap:wrap; }
+.admin-content .admin-data-table .MuiTableCell-root:last-child .MuiButton-root { white-space:nowrap; min-width:0; padding:5px 10px; }
+.admin-content .admin-data-table .MuiTableCell-root:last-child .MuiButton-startIcon { margin-right:4px; }
+
+/* Dense tables: secondary data remains available in the detail/action dialog. */
+.admin-content .admin-checkout-table .MuiTableRow-root>.MuiTableCell-root:nth-child(4),
+.admin-content .admin-checkout-table .MuiTableRow-root>.MuiTableCell-root:nth-child(5),
+.admin-content .admin-checkout-table .MuiTableRow-root>.MuiTableCell-root:nth-child(6),
+.admin-content .admin-checkout-table .MuiTableRow-root>.MuiTableCell-root:nth-child(9) { display:none; }
+.admin-content .admin-early-checkout-table .MuiTableRow-root>.MuiTableCell-root:nth-child(4),
+.admin-content .admin-early-checkout-table .MuiTableRow-root>.MuiTableCell-root:nth-child(6),
+.admin-content .admin-early-checkout-table .MuiTableRow-root>.MuiTableCell-root:nth-child(7),
+.admin-content .admin-early-checkout-table .MuiTableRow-root>.MuiTableCell-root:nth-child(9) { display:none; }
+.admin-content .admin-withdrawals-table .MuiTableRow-root>.MuiTableCell-root:nth-child(3),
+.admin-content .admin-withdrawals-table .MuiTableRow-root>.MuiTableCell-root:nth-child(6) { display:none; }
+.admin-content .admin-bookings-table .MuiTableCell-root:nth-child(2),
+.admin-content .admin-deposits-table .MuiTableCell-root:nth-child(2) { width:22%; }
+.admin-content .admin-bookings-table .MuiTableCell-root:last-child { width:19%; }
+.admin-content .admin-bookings-table .MuiTableCell-root:last-child .MuiButton-root:has(.MuiButton-startIcon) { width:34px; height:34px; padding:0; font-size:0; border-radius:10px; }
+.admin-content .admin-bookings-table .MuiTableCell-root:last-child .MuiButton-startIcon { margin:0; }
+.admin-content .admin-bookings-table .MuiTableCell-root:last-child .MuiButton-startIcon svg { font-size:1.05rem; }
+.admin-content .admin-bookings-table .MuiTableCell-root:last-child .MuiButton-root:not(:has(.MuiButton-startIcon)) { height:34px; padding:4px 9px; font-size:.72rem; }
+.admin-content .admin-posts-table .MuiTableCell-root:first-child { width:28%; }
+.admin-content .admin-posts-table .MuiTableCell-root:nth-child(2) { width:18%; }
+.admin-content .admin-posts-table .MuiTableCell-root:last-child { width:15%; }
+.admin-post-title { display:flex; align-items:center; gap:10px; min-width:0; }
+.admin-post-title .MuiAvatar-root { width:44px; height:44px; flex-shrink:0; background:#dcebe5; color:#176b58; }
+.admin-row-actions { display:flex; align-items:center; justify-content:center; gap:4px; flex-wrap:nowrap!important; }
+.admin-row-actions .MuiIconButton-root { width:32px!important; height:32px!important; }
+.admin-row-actions .MuiIconButton-root svg { font-size:1.05rem; }
+.admin-content .admin-checkout-table .MuiTableCell-root:nth-child(2),
+.admin-content .admin-early-checkout-table .MuiTableCell-root:nth-child(2),
+.admin-content .admin-support-table .MuiTableCell-root:nth-child(2) { width:22%; }
+.admin-content>div>h1,.admin-content>div>h2,.admin-content .MuiTypography-h4 { color:#173b33; font-family:'Playfair Display',serif; font-weight:700; margin-bottom:22px; }
+.admin-page-kicker.MuiTypography-root { color:#4f9a84; font-size:.69rem; font-weight:800; letter-spacing:.16em; margin-bottom:7px; }
+.admin-content .MuiPagination-root { padding:10px; border-radius:14px; background:#f7faf8; }
+.admin-page>div[style*="justify-content: center"] { margin-top:20px!important; }
+.admin-page .MuiAlert-root { border-radius:13px; margin-bottom:18px; }
+
+/* Posts follow the same content surface and action language as data pages. */
+.admin-page>.MuiBox-root .MuiCard-root { overflow:hidden; border:1px solid #e1eae5; box-shadow:none; margin-bottom:12px; }
+.admin-page>.MuiBox-root .MuiCard-root:hover { border-color:#b9d7cb; box-shadow:0 10px 28px rgba(18,55,47,.07); transform:translateY(-1px); }
+.admin-page>.MuiBox-root .MuiCardMedia-root { width:135px; min-height:118px; }
+.admin-content table:not(.MuiTable-root) { width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border:1px solid #dfe9e4; border-radius:16px; }
+.admin-content table:not(.MuiTable-root) th { background:#edf5f1; color:#315d52; padding:13px 15px; text-align:left; font-size:.73rem; text-transform:uppercase; letter-spacing:.04em; }
+.admin-content table:not(.MuiTable-root) td { padding:13px 15px; border-top:1px solid #edf1ef; font-size:.84rem; }
+.admin-content table:not(.MuiTable-root) tr:hover td { background:#f0f8f4; }
+@media(max-width:1100px){.admin-content .MuiTableHead-root .MuiTableCell-root{padding:11px 8px;font-size:.65rem}.admin-content .MuiTableBody-root .MuiTableCell-root{padding:10px 8px;font-size:.76rem}.admin-content .MuiTableCell-root .MuiChip-root{max-width:100%;padding:0 3px}.admin-content .MuiTableCell-root .MuiChip-label{overflow:hidden;text-overflow:ellipsis;padding:0 6px}}
+@media(max-width:900px){.admin-sidebar .MuiDrawer-paper{width:210px}.admin-sidebar{width:210px!important}.admin-main{padding:10px}.admin-content{padding:12px;border-radius:16px}.admin-sidebar__profile{display:none}.admin-page-header{align-items:flex-start;flex-direction:column;gap:12px}.admin-content .admin-data-table .MuiTableCell-root:last-child{width:24%}.admin-content .MuiTableCell-root .MuiButton-startIcon{display:none}}

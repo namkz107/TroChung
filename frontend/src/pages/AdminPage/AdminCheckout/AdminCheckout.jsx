@@ -13,6 +13,7 @@ import { Box } from '@mui/material';
 import { Modal, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import checkoutRequestApi from '../../../services/api/checkoutRequestApi';
+import AdminPageHeader from '../../../Components/Admin/AdminPageHeader';
 
 const AdminCheckout = () => {
   const [requests, setRequests] = useState([]);
@@ -78,7 +79,8 @@ const AdminCheckout = () => {
   const paged = requests.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
-    <div style={{ width: '100%', marginTop: 32 }}>
+    <div className="admin-page">
+      <AdminPageHeader title="Quản lý trả phòng" description="Kiểm tra yêu cầu trả phòng, phí phát sinh và hoàn tiền cọc cho khách thuê." count={requests.length} countLabel="yêu cầu" />
       {error && (
         <div
           style={{
@@ -96,15 +98,16 @@ const AdminCheckout = () => {
       {loading && <div style={{ marginBottom: 12, textAlign: 'center' }}>Đang tải...</div>}
 
       <TableContainer
+        className="admin-data-table admin-checkout-table"
         component={Paper}
         sx={{
           borderRadius: 3,
           boxShadow: '0 2px 16px 0 rgba(25, 118, 210, 0.07)',
-          overflowX: 'auto',
+          overflowX: 'visible',
           width: '100%',
         }}
       >
-        <Table sx={{ minWidth: 1400 }}>
+        <Table>
           <TableHead>
             <TableRow sx={{ bgcolor: '#f4f6fb' }}>
               <TableCell align="center" sx={{ fontWeight: 700, whiteSpace: 'nowrap' }}>Phòng</TableCell>

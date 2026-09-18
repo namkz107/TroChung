@@ -20,6 +20,7 @@ import {
 } from '@mui/material';
 import { getPendingWithdrawalsAdmin, approveWithdrawalAdmin, rejectWithdrawalAdmin } from '../../../services/api/withdrawalApi';
 import { useToast } from '../../../Components/ToastProvider';
+import AdminPageHeader from '../../../Components/Admin/AdminPageHeader';
 
 const COMMISSION_PERCENT = 10;
 
@@ -104,7 +105,8 @@ const AdminWithdrawals = () => {
   };
 
   return (
-    <Box>
+    <Box className="admin-page">
+      <AdminPageHeader title="Yêu cầu rút tiền" description="Xác minh thông tin ngân hàng và xử lý các khoản thanh toán cho chủ phòng." count={list.length} countLabel="yêu cầu" />
       <Typography variant="h5" sx={{ mb: 2, fontWeight: 700 }}>
         Quản lý rút tiền
       </Typography>
@@ -118,7 +120,7 @@ const AdminWithdrawals = () => {
 
         return (
           <>
-            <TableContainer component={Paper} sx={{ borderRadius: 3, boxShadow: '0 2px 16px 0 rgba(25, 118, 210, 0.07)' }}>
+            <TableContainer className="admin-data-table admin-withdrawals-table" component={Paper} sx={{ borderRadius: 3, boxShadow: 'none' }}>
               <Table size="small">
           <TableHead>
                 <TableRow sx={{ bgcolor: '#f4f6fb' }}>

@@ -13,6 +13,7 @@ import { Box } from '@mui/material';
 import { Modal, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import earlyCheckoutApi from '../../../services/api/earlyCheckoutApi';
+import AdminPageHeader from '../../../Components/Admin/AdminPageHeader';
 
 const AdminEarlyCheckout = () => {
   const [earlyCheckoutRequests, setEarlyCheckoutRequests] = useState([]);
@@ -76,7 +77,8 @@ const AdminEarlyCheckout = () => {
   const paged = earlyCheckoutRequests.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
-    <div style={{ maxWidth: 1200, margin: '0 auto', marginTop: 32 }}>
+    <div className="admin-page">
+      <AdminPageHeader title="Trả phòng sớm" description="Xem xét yêu cầu, khoản hoàn trả và phản hồi cho người thuê." count={earlyCheckoutRequests.length} countLabel="yêu cầu" />
       {error && (
         <div
           style={{
@@ -93,8 +95,8 @@ const AdminEarlyCheckout = () => {
       )}
       {loading && <div style={{ marginBottom: 12, textAlign: 'center' }}>Đang tải...</div>}
 
-      <TableContainer component={Paper} sx={{ borderRadius: 3, boxShadow: '0 2px 16px 0 rgba(25, 118, 210, 0.07)' }}>
-        <Table sx={{ minWidth: 700 }}>
+      <TableContainer className="admin-data-table admin-early-checkout-table" component={Paper} sx={{ borderRadius: 3, boxShadow: 'none' }}>
+        <Table>
           <TableHead>
             <TableRow sx={{ bgcolor: '#f4f6fb' }}>
               <TableCell align="center" sx={{ fontWeight: 700 }}>Phòng</TableCell>

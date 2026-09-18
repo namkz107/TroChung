@@ -1,190 +1,128 @@
-
-
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Card, CardContent, CardMedia, Button, Tabs, Tab, Dialog, DialogTitle, DialogContent, DialogActions, Switch, FormControlLabel } from '@mui/material';
-import Pagination from '@mui/material/Pagination';
+import {
+  Avatar, Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle,
+  IconButton, Pagination, Switch, Tab, Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Tabs, Tooltip, Typography,
+} from '@mui/material';
+import { DeleteOutline, VisibilityOutlined } from '@mui/icons-material';
 import { fetchAllPostsAdmin, deletePost } from '../../../services/api/postApi';
 import axiosJWT from '../../../config/axiosJWT';
 import { useConfirm } from '../../../Components/ConfirmProvider';
+import AdminPageHeader from '../../../Components/Admin/AdminPageHeader';
 
-function AdminPostCard({ post, onToggleStatus, onView, onDelete, deletingId }) {
-  const statusActive = post.status !== 'rejected';
-  const isDeleting = deletingId === post.postId;
-  return (
-    <Card sx={{ display: 'flex', mb: 2 }}>
-      {(post.images && post.images[0]) ? (
-        <CardMedia component="img" sx={{ width: 160 }} image={post.images[0]} alt={post.title} />
-      ) : (
-        <Box sx={{ width: 160, bgcolor: 'grey.200', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Typography variant="caption" color="text.secondary">Không ảnh</Typography>
-        </Box>
-      )}
-      <CardContent sx={{ flex: 1 }}>
-        <Typography variant="h6">{post.title}</Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{post.description || '—'}</Typography>
-        <Typography variant="caption" color="text.secondary">Loại: {post.postType || 'room_rental'} · Trạng thái: {post.status}</Typography>
-        <Box sx={{ mt: 1, display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'center' }}>
-          <Button size="small" variant="outlined" onClick={() => onView(post)}>Xem nội dung</Button>
-          <FormControlLabel
-            control={<Switch checked={statusActive} onChange={() => onToggleStatus(post)} color="primary" />}
-            label={statusActive ? 'Hiển thị' : 'Ẩn'}
-          />
-          <Button size="small" variant="outlined" color="error" onClick={() => onDelete(post)} disabled={isDeleting}>
-            {isDeleting ? 'Đang xóa...' : 'Xóa bài'}
-          </Button>
-        </Box>
-      </CardContent>
-    </Card>
-  );
-}
+const PAGE_SIZE = 10;
+
+const normalizeType = (raw) => {
+  const value = String(raw || '').toLowerCase().trim();
+  const clean = value.replace(/[-_]/g, ' ');
+  if (!clean || ['room rental', 'rental', 'roomrental'].includes(clean)) return 'room_rental';
+  if (clean.includes('invite') || clean.includes('roomate') || clean.includes('roommate')) return 'invite roomate';
+  return value;
+};
 
 const AdminPosts = () => {
   const { confirm } = useConfirm();
-  const [tab, setTab] = useState(0); // 0 = all, 1 = rentals, 2 = invite-roommate
+  const [tab, setTab] = useState(0);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [viewPost, setViewPost] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
+  const [page, setPage] = useState(1);
 
   const loadPosts = async () => {
-    setLoading(true);
-    setError(null);
+    setLoading(true); setError(null);
     try {
       const list = await fetchAllPostsAdmin();
       setPosts(Array.isArray(list) ? list : []);
-    } catch (err) {
-      setError(err);
-      setPosts([]);
-    } finally {
-      setLoading(false);
-    }
+    } catch (err) { setError(err); setPosts([]); }
+    finally { setLoading(false); }
   };
 
-  useEffect(() => {
-    loadPosts();
-  }, []);
+  useEffect(() => { loadPosts(); }, []);
 
-  // Normalize postType for filtering
-  const normalizeType = (raw) => {
-    const s = String(raw || '').toLowerCase().trim();
-    const clean = s.replace(/[-_]/g, ' ');
-    if (clean === '') return 'room_rental';
-    if (clean === 'room rental' || clean === 'rental' || clean === 'roomrental' || s === 'room_rental') return 'room_rental';
-    if (clean.includes('invite') || clean.includes('roomate') || clean.includes('roommate')) return 'invite roomate';
-    return s;
-  };
-
-  const rentalPosts = posts.filter(p => normalizeType(p.postType) === 'room_rental');
-  const invitePosts = posts.filter(p => normalizeType(p.postType) === 'invite roomate');
-  const displayedPosts = tab === 0 ? posts : (tab === 1 ? rentalPosts : invitePosts);
-
-  // Pagination (frontend only)
-  const PAGE_SIZE = 10;
-  const [page, setPage] = useState(1);
-  useEffect(() => { setPage(1); }, [tab, posts.length]); // reset page khi đổi tab hoặc data
+  const rentalPosts = posts.filter((post) => normalizeType(post.postType) === 'room_rental');
+  const invitePosts = posts.filter((post) => normalizeType(post.postType) === 'invite roomate');
+  const displayedPosts = tab === 0 ? posts : tab === 1 ? rentalPosts : invitePosts;
   const totalPages = Math.max(1, Math.ceil(displayedPosts.length / PAGE_SIZE));
   const pagedPosts = displayedPosts.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  // Toggle post status (pending <-> rejected) qua API admin
+  useEffect(() => { setPage(1); }, [tab, posts.length]);
+
   const handleToggleStatus = async (post) => {
     if (!post.postId) return;
-    try {
-      setLoading(true);
-      await axiosJWT.put(`/api/posts/${post.postId}/change-status`);
-      await loadPosts();
-    } catch (err) {
-      alert('Lỗi khi cập nhật trạng thái: ' + (err?.response?.data?.message || err.message));
-    } finally {
-      setLoading(false);
-    }
+    try { setLoading(true); await axiosJWT.put(`/api/posts/${post.postId}/change-status`); await loadPosts(); }
+    catch (err) { alert(`Lỗi khi cập nhật trạng thái: ${err?.response?.data?.message || err.message}`); }
+    finally { setLoading(false); }
   };
 
-  // Xóa bài đăng (admin)
   const handleDelete = async (post) => {
     if (!post.postId) return;
-    const ok = await confirm({
-      title: 'Xác nhận xóa bài',
-      message: `Bạn có chắc muốn xóa bài "${post.title}"? Phòng và bài đăng sẽ bị xóa vĩnh viễn.`,
-      confirmText: 'Xóa',
-    });
-    if (!ok) return;
-    try {
-      setDeletingId(post.postId);
-      await deletePost(post.postId);
-      alert('Đã xóa bài đăng.');
-      await loadPosts();
-    } catch (err) {
-      alert('Lỗi khi xóa: ' + (err?.response?.data?.message || err.message));
-    } finally {
-      setDeletingId(null);
-    }
+    const accepted = await confirm({ title: 'Xác nhận xóa bài', message: `Bạn có chắc muốn xóa bài “${post.title}”? Dữ liệu liên quan sẽ bị xóa vĩnh viễn.`, confirmText: 'Xóa' });
+    if (!accepted) return;
+    try { setDeletingId(post.postId); await deletePost(post.postId); await loadPosts(); }
+    catch (err) { alert(`Lỗi khi xóa: ${err?.response?.data?.message || err.message}`); }
+    finally { setDeletingId(null); }
   };
 
   return (
-    <Box sx={{ p: 2 }}>
-      <Typography variant="h4" sx={{ mb: 3 }}>Quản lý bài đăng</Typography>
-      <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 2 }}>
+    <Box className="admin-page">
+      <AdminPageHeader title="Quản lý bài đăng" description="Kiểm duyệt nội dung, khả năng hiển thị và trạng thái các tin đăng." count={posts.length} countLabel="bài đăng" />
+      <Tabs value={tab} onChange={(_, value) => setTab(value)}>
         <Tab label={`Tất cả (${posts.length})`} />
-        <Tab label={`Tin cho thuê (${rentalPosts.length})`} />
-        <Tab label={`Tin tìm ở ghép (${invitePosts.length})`} />
+        <Tab label={`Cho thuê (${rentalPosts.length})`} />
+        <Tab label={`Tìm ở ghép (${invitePosts.length})`} />
       </Tabs>
 
-      {loading && <Typography>Đang tải...</Typography>}
-      {error && <Typography color="error">Lỗi khi tải: {String(error.message || error)}</Typography>}
+      {error && <Typography color="error" sx={{ mb: 2 }}>Không thể tải danh sách bài đăng.</Typography>}
+      <TableContainer className="admin-data-table admin-posts-table">
+        <Table>
+          <TableHead><TableRow>
+            <TableCell>Bài đăng</TableCell><TableCell>Người đăng</TableCell><TableCell>Loại tin</TableCell>
+            <TableCell>Giá thuê</TableCell><TableCell>Trạng thái</TableCell><TableCell align="center">Hành động</TableCell>
+          </TableRow></TableHead>
+          <TableBody>
+            {!loading && pagedPosts.length === 0 && <TableRow><TableCell colSpan={6} align="center" sx={{ py: 6, color: 'text.secondary' }}>Chưa có bài đăng trong mục này.</TableCell></TableRow>}
+            {pagedPosts.map((post) => {
+              const active = post.status !== 'rejected';
+              return (
+                <TableRow key={post.postId || post.id}>
+                  <TableCell>
+                    <Box className="admin-post-title">
+                      <Avatar variant="rounded" src={post.images?.[0]}>{post.title?.charAt(0)}</Avatar>
+                      <Box sx={{ minWidth: 0 }}><Typography fontWeight={700} noWrap title={post.title}>{post.title || 'Chưa có tiêu đề'}</Typography><Typography variant="caption" color="text.secondary" noWrap>{post.address || post.district || post.city || 'Chưa cập nhật địa chỉ'}</Typography></Box>
+                    </Box>
+                  </TableCell>
+                  <TableCell><Typography fontSize=".82rem" noWrap>{post.author || post.user?.email || '—'}</Typography></TableCell>
+                  <TableCell><Chip size="small" variant="outlined" label={normalizeType(post.postType) === 'room_rental' ? 'Cho thuê' : 'Ở ghép'} /></TableCell>
+                  <TableCell><Typography fontWeight={700}>{post.price != null ? Number(post.price).toLocaleString('vi-VN') : '—'} <Typography component="span" variant="caption" color="text.secondary">{post.unit || 'VND'}</Typography></Typography></TableCell>
+                  <TableCell><Chip size="small" color={active ? 'success' : 'default'} label={active ? 'Đang hiển thị' : 'Đã ẩn'} /></TableCell>
+                  <TableCell align="center">
+                    <Box className="admin-row-actions">
+                      <Tooltip title="Xem nội dung"><IconButton onClick={() => setViewPost(post)}><VisibilityOutlined /></IconButton></Tooltip>
+                      <Tooltip title={active ? 'Ẩn bài' : 'Hiển thị bài'}><Switch size="small" checked={active} onChange={() => handleToggleStatus(post)} /></Tooltip>
+                      <Tooltip title="Xóa bài"><span><IconButton color="error" disabled={deletingId === post.postId} onClick={() => handleDelete(post)}><DeleteOutline /></IconButton></span></Tooltip>
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
-      {!loading && (
-        <Box>
-          {pagedPosts.length === 0 && <Typography>Chưa có bài đăng nào ở mục này.</Typography>}
-          {pagedPosts.map(p => (
-            <AdminPostCard
-              key={p.postId || p.id}
-              post={p}
-              onToggleStatus={handleToggleStatus}
-              onView={setViewPost}
-              onDelete={handleDelete}
-              deletingId={deletingId}
-            />
-          ))}
-          {/* Pagination */}
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-            <Pagination
-              count={totalPages}
-              page={page}
-              onChange={(_, value) => setPage(value)}
-              color="primary"
-            />
-          </Box>
-        </Box>
-      )}
-
-      {/* Dialog to view post content */}
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}><Pagination count={totalPages} page={page} onChange={(_, value) => setPage(value)} color="primary" /></Box>
       <Dialog open={!!viewPost} onClose={() => setViewPost(null)} maxWidth="sm" fullWidth>
-        <DialogTitle>Nội dung bài đăng</DialogTitle>
-        <DialogContent dividers>
-          {viewPost && (
-            <>
-              <Typography variant="h6">{viewPost.title}</Typography>
-              <Typography variant="body2" sx={{ mb: 1 }}>{viewPost.description}</Typography>
-              <Typography variant="caption">Loại: {viewPost.postType}</Typography>
-              <Typography variant="body2" sx={{ mt: 2 }}>Địa chỉ: {viewPost.address || '—'}, {viewPost.district || '—'}, {viewPost.city || '—'}</Typography>
-              <Typography variant="body2">Giá: {viewPost.price != null ? Number(viewPost.price).toLocaleString('vi-VN') : '—'} {viewPost.unit || 'VND'}</Typography>
-              <Typography variant="body2">Diện tích: {viewPost.area} m²</Typography>
-              <Typography variant="body2">Tiện ích: {(viewPost.utilities || []).join(', ')}</Typography>
-              <Typography variant="body2">Ghi chú: {viewPost.notes}</Typography>
-              <Typography variant="body2">Trạng thái: {viewPost.status}</Typography>
-              <Typography variant="body2">Người đăng: {viewPost.author} ({viewPost.phone})</Typography>
-              <Box sx={{ mt: 2 }}>
-                {(viewPost.images || []).map((img, idx) => (
-                  <img key={idx} src={img} alt="img" style={{ maxWidth: 120, marginRight: 8 }} />
-                ))}
-              </Box>
-            </>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setViewPost(null)}>Đóng</Button>
-        </DialogActions>
+        <DialogTitle>Chi tiết bài đăng</DialogTitle>
+        <DialogContent dividers>{viewPost && <>
+          <Typography variant="h6">{viewPost.title}</Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ my: 1 }}>{viewPost.description || 'Không có mô tả.'}</Typography>
+          <Typography variant="body2">Địa chỉ: {[viewPost.address, viewPost.district, viewPost.city].filter(Boolean).join(', ') || '—'}</Typography>
+          <Typography variant="body2">Giá: {viewPost.price != null ? Number(viewPost.price).toLocaleString('vi-VN') : '—'} {viewPost.unit || 'VND'}</Typography>
+          <Typography variant="body2">Diện tích: {viewPost.area || '—'} m²</Typography>
+          <Box sx={{ display: 'flex', gap: 1, mt: 2, overflowX: 'auto' }}>{(viewPost.images || []).map((image, index) => <Box component="img" key={index} src={image} alt="Phòng" sx={{ width: 120, height: 85, objectFit: 'cover', borderRadius: 2 }} />)}</Box>
+        </>}</DialogContent>
+        <DialogActions><Button onClick={() => setViewPost(null)}>Đóng</Button></DialogActions>
       </Dialog>
     </Box>
   );
