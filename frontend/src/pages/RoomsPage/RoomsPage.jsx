@@ -964,16 +964,16 @@ const RoomsPage = ({ postType = 'room_rental' }) => {
                 size="medium"
                 onClick={openAIFilterDialog}
                 sx={{
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #176b58 0%, #0d4b3e 100%)',
                   textTransform: 'none',
                   borderRadius: 2,
                   px: 3,
                   whiteSpace: 'nowrap',
                   fontWeight: 600,
-                  boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+                  boxShadow: '0 4px 12px rgba(23, 107, 88, 0.3)',
                   '&:hover': {
-                    background: 'linear-gradient(135deg, #5568d3 0%, #5e3c82 100%)',
-                    boxShadow: '0 6px 16px rgba(102, 126, 234, 0.4)',
+                    background: 'linear-gradient(135deg, #145947 0%, #0a4135 100%)',
+                    boxShadow: '0 6px 16px rgba(23, 107, 88, 0.4)',
                     transform: 'translateY(-2px)'
                   },
                   transition: 'all 0.3s ease'
@@ -1340,7 +1340,7 @@ const RoomsPage = ({ postType = 'room_rental' }) => {
 
   return (
     <Box sx={{
-      background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)',
+      background: 'linear-gradient(135deg, rgba(23, 107, 88, 0.05) 0%, rgba(13, 75, 62, 0.05) 100%)',
       minHeight: 'calc(100vh - 70px)',
       width: '100%',
       m: 0,

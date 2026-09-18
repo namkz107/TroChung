@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 import { useToast } from '../../Components/ToastProvider';
 import { useNavigate } from 'react-router-dom';
 import { resolveRegionCardImage, NEUTRAL_FALLBACK } from '../../utils/viWikiCityImage';
+import './HomeLanding.css';
 
 const formatAddress = (item) => {
   if (!item) return '';
@@ -113,6 +114,7 @@ const HomePostGrid = ({ items = [], favoriteIds = new Set(), onToggleFavorite, s
     >
       {items.map((it) => (
         <Card
+          className="room-card"
           key={it.id}
           onClick={() => navigate(it.roomId ? `/room/${it.roomId}` : `/room/${it.id}`)}
           sx={{
@@ -129,8 +131,9 @@ const HomePostGrid = ({ items = [], favoriteIds = new Set(), onToggleFavorite, s
             },
           }}
         >
-          <Box sx={{ position: 'relative', width: '100%', flexShrink: 0 }}>
+          <Box className="room-card__image-wrap" sx={{ position: 'relative', width: 'auto', flexShrink: 0 }}>
             <img
+              className="room-card__image"
               src={it.thumbnail || (process.env.PUBLIC_URL + '/logo192.png')}
               alt={it.title}
               style={{
@@ -138,8 +141,7 @@ const HomePostGrid = ({ items = [], favoriteIds = new Set(), onToggleFavorite, s
                 height: 180,
                 objectFit: 'cover',
                 display: 'block',
-                borderTopLeftRadius: 6,
-                borderTopRightRadius: 6,
+                borderRadius: 18,
               }}
             />
             {it.price && (
@@ -148,7 +150,7 @@ const HomePostGrid = ({ items = [], favoriteIds = new Set(), onToggleFavorite, s
                   position: 'absolute',
                   left: 8,
                   bottom: 8,
-                  bgcolor: 'primary.main',
+                  bgcolor: 'rgba(18,55,47,.9)',
                   color: '#fff',
                   px: 1.5,
                   py: 0.6,
@@ -245,6 +247,7 @@ const HomePostGrid = ({ items = [], favoriteIds = new Set(), onToggleFavorite, s
                 {it.author}
               </Typography>
               <Button
+                className="room-card__detail"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -458,13 +461,22 @@ const HomeLanding = () => {
   }, []);
 
   return (
-    <Box sx={{ width: '100%', height: '100%' }}>
-      <Box sx={{ mt: 1, p: 2 }}>
-        <Carousel sx={{ mt: 2 }} />
-      </Box>
+    <Box className="home-landing" sx={{ width: '100%', height: '100%' }}>
+      <Carousel />
 
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Box sx={{ maxWidth: 1500, width: '100%', mx: 'auto', px: 2, pb: 4 }}>
+        <Box className="home-main">
+          <Box className="home-intro">
+            <Box>
+              <Typography className="home-kicker">Sống theo cách của bạn</Typography>
+              <Typography component="h2">Một nơi ở tốt,<br />một khởi đầu đẹp.</Typography>
+            </Box>
+            <Box className="home-intro__stats">
+              <Box className="home-stat"><strong>5K+</strong><span>Tin phòng chất lượng</span></Box>
+              <Box className="home-stat"><strong>24/7</strong><span>Hỗ trợ người thuê</span></Box>
+              <Box className="home-stat"><strong>4.9</strong><span>Điểm hài lòng</span></Box>
+            </Box>
+          </Box>
           {loading && (
             <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
               <CircularProgress />
@@ -547,6 +559,7 @@ const HomeLanding = () => {
                   </Typography>
                 ) : topRegionCards.length === 1 ? (
                   <Box
+                    className="region-card"
                     key={topRegionCards[0].key}
                     onClick={() => navigate(`/rooms?city=${encodeURIComponent(topRegionCards[0].cityQuery)}&page=1`)}
                     sx={{
@@ -593,6 +606,7 @@ const HomeLanding = () => {
                     }}
                   >
                     <Box
+                      className="region-card"
                       key={topRegionCards[0].key}
                       onClick={() => navigate(`/rooms?city=${encodeURIComponent(topRegionCards[0].cityQuery)}&page=1`)}
                       sx={{
@@ -633,6 +647,7 @@ const HomeLanding = () => {
                     <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 1 }}>
                       {topRegionCards.slice(1).map((area) => (
                         <Box
+                          className="region-card"
                           key={area.key}
                           onClick={() => navigate(`/rooms?city=${encodeURIComponent(area.cityQuery)}&page=1`)}
                           sx={{
@@ -676,6 +691,11 @@ const HomeLanding = () => {
                   </Box>
                 )}
               </Section>
+              <Box className="home-benefits">
+                <Box className="home-benefit"><span className="home-benefit__number">01</span><h3>Thông tin minh bạch</h3><p>Giá thuê, tiện nghi và vị trí rõ ràng giúp bạn quyết định tự tin hơn.</p></Box>
+                <Box className="home-benefit"><span className="home-benefit__number">02</span><h3>Kết nối trực tiếp</h3><p>Trao đổi nhanh với chủ nhà, đặt lịch xem phòng ngay trên một nền tảng.</p></Box>
+                <Box className="home-benefit"><span className="home-benefit__number">03</span><h3>An tâm đồng hành</h3><p>Đội ngũ hỗ trợ luôn sẵn sàng trong suốt hành trình tìm và thuê phòng.</p></Box>
+              </Box>
             </>
           )}
         </Box>

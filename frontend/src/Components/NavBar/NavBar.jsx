@@ -86,10 +86,10 @@ const NavBar = () => {
       position="sticky"
       elevation={0}
       sx={{
-        background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.03) 0%, rgba(118, 75, 162, 0.03) 100%)',
+        background: 'linear-gradient(135deg, rgba(23, 107, 88, 0.03) 0%, rgba(13, 75, 62, 0.03) 100%)',
         backdropFilter: 'blur(10px)',
-        borderBottom: '1px solid rgba(102, 126, 234, 0.1)',
-        boxShadow: '0 4px 16px rgba(102, 126, 234, 0.08)',
+        borderBottom: '1px solid rgba(23, 107, 88, 0.1)',
+        boxShadow: '0 4px 16px rgba(23, 107, 88, 0.08)',
         height: 75,
       }}
     >
@@ -110,17 +110,17 @@ const NavBar = () => {
         <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
           <Box
             sx={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, #176b58 0%, #0d4b3e 100%)',
               borderRadius: 3,
               px: 3,
               py: 1.2,
               display: 'flex',
               alignItems: 'center',
-              boxShadow: '0 4px 12px rgba(102, 126, 234, 0.25), 0 2px 4px rgba(102, 126, 234, 0.15)',
+              boxShadow: '0 4px 12px rgba(23, 107, 88, 0.25), 0 2px 4px rgba(23, 107, 88, 0.15)',
               transition: 'all 0.3s ease',
               '&:hover': {
                 transform: 'translateY(-2px)',
-                boxShadow: '0 6px 16px rgba(102, 126, 234, 0.35), 0 3px 6px rgba(102, 126, 234, 0.2)',
+                boxShadow: '0 6px 16px rgba(23, 107, 88, 0.35), 0 3px 6px rgba(23, 107, 88, 0.2)',
               }
             }}
           >
@@ -147,7 +147,7 @@ const NavBar = () => {
             to="/"
             startIcon={<Home sx={{ fontSize: 20 }} />}
             sx={{
-              color: location.pathname === '/' ? '#764ba2' : '#667eea',
+              color: location.pathname === '/' ? '#0d4b3e' : '#176b58',
               textTransform: 'none',
               fontWeight: location.pathname === '/' ? 700 : 600,
               fontSize: '0.95rem',
@@ -156,9 +156,9 @@ const NavBar = () => {
               borderRadius: 2.5,
               position: 'relative',
               transition: 'all 0.3s ease',
-              bgcolor: location.pathname === '/' ? 'rgba(118, 75, 162, 0.08)' : 'transparent',
+              bgcolor: location.pathname === '/' ? 'rgba(13, 75, 62, 0.08)' : 'transparent',
               '&:hover': {
-                bgcolor: 'rgba(102, 126, 234, 0.1)',
+                bgcolor: 'rgba(23, 107, 88, 0.1)',
                 transform: 'translateY(-2px)',
               },
               '&:after': {
@@ -169,7 +169,7 @@ const NavBar = () => {
                 transform: location.pathname === '/' ? 'translateX(-50%) scaleX(1)' : 'translateX(-50%) scaleX(0)',
                 width: '70%',
                 height: 2,
-                background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(90deg, #176b58 0%, #0d4b3e 100%)',
                 borderRadius: 1,
                 transition: 'transform 0.3s ease',
               },
@@ -187,7 +187,7 @@ const NavBar = () => {
             to="/rooms"
             startIcon={<HomeWork sx={{ fontSize: 20 }} />}
             sx={{
-              color: location.pathname === '/rooms' ? '#764ba2' : '#667eea',
+              color: location.pathname === '/rooms' ? '#0d4b3e' : '#176b58',
               textTransform: 'none',
               fontWeight: location.pathname === '/rooms' ? 700 : 600,
               fontSize: '0.95rem',
@@ -196,9 +196,9 @@ const NavBar = () => {
               borderRadius: 2.5,
               position: 'relative',
               transition: 'all 0.3s ease',
-              bgcolor: location.pathname === '/rooms' ? 'rgba(118, 75, 162, 0.08)' : 'transparent',
+              bgcolor: location.pathname === '/rooms' ? 'rgba(13, 75, 62, 0.08)' : 'transparent',
               '&:hover': {
-                bgcolor: 'rgba(102, 126, 234, 0.1)',
+                bgcolor: 'rgba(23, 107, 88, 0.1)',
                 transform: 'translateY(-2px)',
               },
               '&:after': {
@@ -209,7 +209,7 @@ const NavBar = () => {
                 transform: location.pathname === '/rooms' ? 'translateX(-50%) scaleX(1)' : 'translateX(-50%) scaleX(0)',
                 width: '70%',
                 height: 2,
-                background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(90deg, #176b58 0%, #0d4b3e 100%)',
                 borderRadius: 1,
                 transition: 'transform 0.3s ease',
               },
@@ -228,7 +228,7 @@ const NavBar = () => {
             to="/about"
             startIcon={<HelpOutline sx={{ fontSize: 20 }} />}
             sx={{
-              color: location.pathname === '/about' ? '#764ba2' : '#667eea',
+              color: location.pathname === '/about' ? '#0d4b3e' : '#176b58',
               textTransform: 'none',
               fontWeight: location.pathname === '/about' ? 700 : 600,
               fontSize: '0.95rem',
@@ -237,9 +237,9 @@ const NavBar = () => {
               borderRadius: 2.5,
               position: 'relative',
               transition: 'all 0.3s ease',
-              bgcolor: location.pathname === '/about' ? 'rgba(118, 75, 162, 0.08)' : 'transparent',
+              bgcolor: location.pathname === '/about' ? 'rgba(13, 75, 62, 0.08)' : 'transparent',
               '&:hover': {
-                bgcolor: 'rgba(102, 126, 234, 0.1)',
+                bgcolor: 'rgba(23, 107, 88, 0.1)',
                 transform: 'translateY(-2px)',
               },
               '&:after': {
@@ -250,7 +250,7 @@ const NavBar = () => {
                 transform: location.pathname === '/about' ? 'translateX(-50%) scaleX(1)' : 'translateX(-50%) scaleX(0)',
                 width: '70%',
                 height: 2,
-                background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(90deg, #176b58 0%, #0d4b3e 100%)',
                 borderRadius: 1,
                 transition: 'transform 0.3s ease',
               },
@@ -276,7 +276,7 @@ const NavBar = () => {
                 to={user?.role === 'admin' ? "/admin" : "/user/profile"}
                 startIcon={<ManageAccounts />}
                 sx={{
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #176b58 0%, #0d4b3e 100%)',
                   color: 'white',
                   textTransform: 'none',
                   fontWeight: 700,
@@ -284,11 +284,11 @@ const NavBar = () => {
                   px: 3,
                   py: 1,
                   borderRadius: 2.5,
-                  boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+                  boxShadow: '0 4px 12px rgba(23, 107, 88, 0.3)',
                   transition: 'all 0.3s ease',
                   '&:hover': { 
-                    background: 'linear-gradient(135deg, #5568d3 0%, #5e3c82 100%)',
-                    boxShadow: '0 6px 16px rgba(102, 126, 234, 0.4)',
+                    background: 'linear-gradient(135deg, #145947 0%, #0a4135 100%)',
+                    boxShadow: '0 6px 16px rgba(23, 107, 88, 0.4)',
                     transform: 'translateY(-2px)',
                   }
                 }}
@@ -309,12 +309,12 @@ const NavBar = () => {
               >
                 <Avatar
                   sx={{ 
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: 'linear-gradient(135deg, #176b58 0%, #0d4b3e 100%)',
                     color: 'white',
                     width: 40, 
                     height: 40,
                     fontWeight: 700,
-                    boxShadow: '0 3px 8px rgba(102, 126, 234, 0.3)',
+                    boxShadow: '0 3px 8px rgba(23, 107, 88, 0.3)',
                     border: '2px solid rgba(255, 255, 255, 0.8)',
                   }}
                   alt={user.username}
@@ -361,18 +361,18 @@ const NavBar = () => {
                 component={Link} 
                 to="/login"
                 sx={{
-                  color: '#667eea',
+                  color: '#176b58',
                   textTransform: 'none',
                   fontWeight: 600,
                   fontSize: '0.95rem',
                   px: 2.5,
                   py: 1,
                   borderRadius: 2.5,
-                  border: '1.5px solid rgba(102, 126, 234, 0.3)',
+                  border: '1.5px solid rgba(23, 107, 88, 0.3)',
                   transition: 'all 0.3s ease',
                   '&:hover': {
-                    bgcolor: 'rgba(102, 126, 234, 0.1)',
-                    borderColor: '#667eea',
+                    bgcolor: 'rgba(23, 107, 88, 0.1)',
+                    borderColor: '#176b58',
                     transform: 'translateY(-2px)',
                   }
                 }}
@@ -384,7 +384,7 @@ const NavBar = () => {
                 component={Link}
                 to="/register"
                 sx={{ 
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #176b58 0%, #0d4b3e 100%)',
                   color: 'white',
                   textTransform: 'none',
                   fontWeight: 700,
@@ -392,11 +392,11 @@ const NavBar = () => {
                   px: 3,
                   py: 1,
                   borderRadius: 2.5,
-                  boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+                  boxShadow: '0 4px 12px rgba(23, 107, 88, 0.3)',
                   transition: 'all 0.3s ease',
                   '&:hover': { 
-                    background: 'linear-gradient(135deg, #5568d3 0%, #5e3c82 100%)',
-                    boxShadow: '0 6px 16px rgba(102, 126, 234, 0.4)',
+                    background: 'linear-gradient(135deg, #145947 0%, #0a4135 100%)',
+                    boxShadow: '0 6px 16px rgba(23, 107, 88, 0.4)',
                     transform: 'translateY(-2px)',
                   }
                 }}

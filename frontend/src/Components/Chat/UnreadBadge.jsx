@@ -36,9 +36,9 @@ const UnreadBadge = ({ count, size = 'medium', variant = 'default' }) => {
             boxShadow: '0 2px 4px rgba(244, 67, 54, 0.3)',
         },
         primary: {
-            bgcolor: '#667eea',
+            bgcolor: '#176b58',
             color: 'white',
-            boxShadow: '0 2px 4px rgba(102, 126, 234, 0.3)',
+            boxShadow: '0 2px 4px rgba(23, 107, 88, 0.3)',
         },
         success: {
             bgcolor: '#4caf50',

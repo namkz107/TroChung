@@ -194,11 +194,11 @@ const NotificationBadge = () => {
         <IconButton
             onClick={handleClick}
             sx={{
-                color: '#667eea',
+                color: '#176b58',
                 transition: 'all 0.3s ease',
                 position: 'relative',
                 '&:hover': {
-                    bgcolor: 'rgba(102, 126, 234, 0.1)',
+                    bgcolor: 'rgba(23, 107, 88, 0.1)',
                     transform: 'scale(1.05)',
                 }
             }}

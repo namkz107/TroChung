@@ -418,15 +418,15 @@ const ChatInboxPage = () => {
                                         sx={{ 
                                             px: 2, 
                                             py: 1.5, 
-                                            bgcolor: conv.unreadCount > 0 ? 'rgba(102, 126, 234, 0.05)' : 'transparent',
-                                            borderLeft: conv.unreadCount > 0 ? '3px solid #667eea' : '3px solid transparent',
+                                            bgcolor: conv.unreadCount > 0 ? 'rgba(23, 107, 88, 0.05)' : 'transparent',
+                                            borderLeft: conv.unreadCount > 0 ? '3px solid #176b58' : '3px solid transparent',
                                             transition: 'all 0.2s ease',
                                             '&.Mui-selected': { 
-                                                bgcolor: 'rgba(102, 126, 234, 0.15)',
-                                                borderLeft: '3px solid #667eea'
+                                                bgcolor: 'rgba(23, 107, 88, 0.15)',
+                                                borderLeft: '3px solid #176b58'
                                             },
                                             '&:hover': {
-                                                bgcolor: 'rgba(102, 126, 234, 0.1)',
+                                                bgcolor: 'rgba(23, 107, 88, 0.1)',
                                             }
                                         }}
                                     >

@@ -1,44 +1,49 @@
-import Carousel from 'react-bootstrap/Carousel';
+import React, { useState } from 'react';
+import { Box, Button, Chip, InputBase, Typography } from '@mui/material';
+import { ArrowForward, LocationOn, Search, Verified } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
-function CarouselFadeExample() {
-  const base = process.env.PUBLIC_URL || '';
+const QUICK_CITIES = ['Hồ Chí Minh', 'Hà Nội', 'Đà Nẵng'];
 
-  const slides = [
-    {
-      src: 'banner1.jpg',
-      heading: 'Chào mừng bạn đến TroChung',
-      body: 'Tìm căn phòng phù hợp chỉ với vài thao tác đơn giản.',
-    },
-    {
-      src: 'banner2.jpg',
-      heading: 'Khám phá phòng mới mỗi ngày',
-      body: 'Nguồn tin cập nhật liên tục từ các chủ trọ uy tín.',
-    },
-    {
-      src: 'banner2.jpg',
-      heading: 'Kết nối nhanh chóng',
-      body: 'Liên hệ chủ trọ, đặt lịch xem và theo dõi yêu thích.',
-    },
-  ];
+function HeroSearch() {
+  const navigate = useNavigate();
+  const [keyword, setKeyword] = useState('');
+
+  const submit = (event) => {
+    event?.preventDefault();
+    const query = keyword.trim();
+    navigate(query ? `/rooms?search=${encodeURIComponent(query)}&page=1` : '/rooms');
+  };
 
   return (
-    <Carousel fade controls indicators>
-      {slides.map((slide, idx) => (
-        <Carousel.Item key={idx}>
-          <img
-            className="d-block w-100"
-            style={{ maxHeight: 420, objectFit: 'cover' }}
-            src={`${base}/${slide.src}`}
-            alt={slide.heading}
-          />
-          <Carousel.Caption>
-            <h3>{slide.heading}</h3>
-            <p>{slide.body}</p>
-          </Carousel.Caption>
-        </Carousel.Item>
-      ))}
-    </Carousel>
+    <Box className="home-hero">
+      <Box className="home-hero__image" />
+      <Box className="home-hero__glow home-hero__glow--one" />
+      <Box className="home-hero__glow home-hero__glow--two" />
+      <Box className="home-hero__content">
+        <Chip className="home-hero__eyebrow" icon={<Verified />} label="Hàng nghìn phòng đã được xác thực" />
+        <Typography component="h1" className="home-hero__title">
+          Chạm đến không gian<br /><span>thuộc về riêng bạn.</span>
+        </Typography>
+        <Typography className="home-hero__lead">
+          Tìm căn phòng phù hợp với nhịp sống của bạn — nhanh hơn, an tâm hơn và đầy cảm hứng.
+        </Typography>
+        <Box component="form" onSubmit={submit} className="hero-search">
+          <LocationOn className="hero-search__pin" />
+          <Box className="hero-search__field">
+            <Typography component="label">Bạn muốn sống ở đâu?</Typography>
+            <InputBase fullWidth value={keyword} onChange={(event) => setKeyword(event.target.value)} placeholder="Nhập quận, thành phố hoặc tên đường..." inputProps={{ 'aria-label': 'Tìm kiếm phòng theo địa điểm' }} />
+          </Box>
+          <Button type="submit" className="hero-search__button" startIcon={<Search />}>Tìm phòng</Button>
+        </Box>
+        <Box className="home-hero__quick">
+          <Typography>Khám phá nhanh:</Typography>
+          {QUICK_CITIES.map((city) => <Button key={city} onClick={() => navigate(`/rooms?city=${encodeURIComponent(city)}&page=1`)}>{city}</Button>)}
+        </Box>
+      </Box>
+      <Button className="home-hero__explore" onClick={() => navigate('/rooms')} endIcon={<ArrowForward />}>Xem tất cả phòng</Button>
+    </Box>
   );
 }
 
-export default CarouselFadeExample;
+export default HeroSearch;

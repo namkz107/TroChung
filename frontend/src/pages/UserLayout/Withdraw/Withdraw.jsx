@@ -228,7 +228,7 @@ const Withdraw = () => {
             variant="contained"
             disabled={loading || numAmount < 1000}
             sx={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, #176b58 0%, #0d4b3e 100%)',
               fontWeight: 600,
             }}
           >

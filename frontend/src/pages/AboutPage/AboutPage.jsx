@@ -65,7 +65,7 @@ const AboutPage = () => {
       {/* Hero Section */}
       <Box
         sx={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: 'linear-gradient(135deg, #176b58 0%, #0d4b3e 100%)',
           color: 'white',
           py: { xs: 8, md: 12 },
           position: 'relative',
@@ -126,7 +126,7 @@ const AboutPage = () => {
                 borderRadius: 3,
                 border: '2px solid',
                 borderColor: 'primary.light',
-                background: 'linear-gradient(135deg, #667eea15 0%, #764ba215 100%)'
+                background: 'linear-gradient(135deg, #176b5815 0%, #0d4b3e15 100%)'
               }}
             >
               <Typography
@@ -345,7 +345,7 @@ const AboutPage = () => {
       {/* CTA Section */}
       <Box
         sx={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: 'linear-gradient(135deg, #176b58 0%, #0d4b3e 100%)',
           py: 8,
           color: 'white'
         }}
