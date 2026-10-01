@@ -30,8 +30,8 @@ const Footer = () => (
           </Typography>
           <Stack spacing={1.2} sx={{ mt: 3, color: 'rgba(255,255,255,.75)' }}>
             <Stack direction="row" spacing={1.2}><PlaceOutlined fontSize="small" /><Typography variant="body2">Việt Nam</Typography></Stack>
-            <Stack direction="row" spacing={1.2}><MailOutline fontSize="small" /><Typography variant="body2">support@trochung.vn</Typography></Stack>
-            <Stack direction="row" spacing={1.2}><PhoneOutlined fontSize="small" /><Typography variant="body2">1900 1234</Typography></Stack>
+            <Stack direction="row" spacing={1.2}><MailOutline fontSize="small" /><Typography variant="body2">namkz107@gmail.com</Typography></Stack>
+            <Stack direction="row" spacing={1.2}><PhoneOutlined fontSize="small" /><Typography variant="body2">0965243386</Typography></Stack>
           </Stack>
         </Box>
         {footerGroups.map((group) => (

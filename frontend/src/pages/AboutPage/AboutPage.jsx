@@ -308,13 +308,14 @@ const AboutPage = () => {
             >
               <Avatar
                 src="/images/about/ceo-founder.png"
-                alt="Chân dung Nguyễn Đức Thắng — CEO & Founder Trọ Chung"
+                alt="Chân dung Trần Hải Nam — CEO & Founder Trọ Chung"
+                imgProps={{ style: { objectFit: 'contain' } }}
                 sx={{
                   width: 120,
                   height: 120,
                   mx: 'auto',
                   mb: 2,
-                  bgcolor: 'primary.main',
+                  bgcolor: '#fff',
                   fontSize: '3rem',
                   fontWeight: 600,
                   border: '4px solid',
@@ -322,7 +323,7 @@ const AboutPage = () => {
                 }}
               />
               <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5 }}>
-                Nguyễn Đức Thắng
+                Trần Hải Nam
               </Typography>
               <Typography
                 variant="body1"
